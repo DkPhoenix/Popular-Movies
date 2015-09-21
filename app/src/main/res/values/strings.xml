@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="action_popularity" translatable="false">Popularity</string>
+    <string name="action_rating" translatable="false">Rating</string>
+    <string name="action_revenue" translatable="false">Revenue</string>
+    <string name="action_favorites" translatable="false">Favorites</string>
     <string name="action_settings">Settings</string>
 </resources>
