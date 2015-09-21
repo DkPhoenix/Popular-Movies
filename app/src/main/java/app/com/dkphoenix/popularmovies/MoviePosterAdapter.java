@@ -1,12 +1,9 @@
 package app.com.dkphoenix.popularmovies;
 
 import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
  * Much of the code was taken from Udacities Android Custom ArrayAdapter class
  * https://github.com/udacity/android-custom-arrayadapter
  */
-public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
+public class MoviePosterAdapter extends ArrayAdapter<Movie> {
     private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
 
     /**
@@ -24,11 +21,11 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
      * to populate into the lists
      *
      * @param context        The current context. Used to inflate the layout file.
-     * @param moviePosters A List of MovieFlavor objects to display in the grid
+     * @param movies A List of MovieFlavor objects to display in the grid
      */
-    public MoviePosterAdapter(Activity context, List<MoviePoster> moviePosters) {
+    public MoviePosterAdapter(Activity context, List<Movie> movies) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
-        super(context,0, moviePosters);
+        super(context,0, movies);
     }
 
     /**
@@ -43,7 +40,7 @@ public class MoviePosterAdapter extends ArrayAdapter<MoviePoster> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Gets the AndroidFlavor object from the ArrayAdapter at the appropriate position
-        MoviePoster moviePoster = getItem(position);
+        Movie movie = getItem(position);
 
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
