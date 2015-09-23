@@ -17,5 +17,8 @@
             </intent-filter>
         </activity>
     </application>
+    <provider
+        android:authorities="app.com.dkphoenix.popularmovies"
+        android:name=".data.MovieProvider" />
 
 </manifest>

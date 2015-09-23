@@ -1,5 +1,6 @@
 package app.com.dkphoenix.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Vector;
 
 /**
  * Created by DkPhoenix on 9/21/2015.
@@ -31,7 +33,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         mContext = context;
     }
 
-    private String[] getMovieDataFromJson(String movieJasonStr) {
+    private void getMovieDataFromJson(String movieJasonStr) {
 
         // Names of the JSON objects that need to be extracted
         final String MDB_RESULTS = "results";
@@ -50,12 +52,28 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             JSONObject movieJson = new JSONObject(movieJasonStr);
             JSONArray movieArray = movieJson.getJSONArray(MDB_RESULTS);
 
+            // Insert the new movie information into the database
+            Vector<ContentValues> cVector = new Vector<>(movieArray.length());
+
             // return value that will be filled with movie details
             //String[] resultsStrs = new String[];
             for (int i = 0; i < movieArray.length(); i++) {
-                // Values to be collected
-                //// TODO: 9/21/2015 Add strings
+                JSONObject movie = movieArray.getJSONObject(i);
+                Movie movieObject = new Movie(
+                        movie.getInt(MDB_ID),
+                        movie.getString(MDB_TITLE),
+                        movie.getString(MDB_POSTER),
+                        movie.getString(MDB_DESCRIPTION),
+                        Float.parseFloat(movie.getString(MDB_RATING)),
+                        movie.getString(MDB_RELEASE_DATE),
+                        Float.parseFloat(movie.getString(MDB_POPULARITY)),
+                        movie.getString(MDB_IMAGE),
+                        movie.getInt(MDB_RATING_COUNT)
+                );
 
+                ContentValues movieValues = new ContentValues();
+
+                //movieValues.put()
             }
 
 
@@ -63,8 +81,6 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-
-        return null;
     }
 
     /**

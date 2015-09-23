@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_popularity"
-        android:title="@string/action_popularity"
+    <item android:id="@+id/action_sort_by_popularity"
+        android:title="@string/action_sort_by_popularity"
         app:showAsAction="never" />
-    <item android:id="@+id/action_rating"
-        android:title="@string/action_rating"
+    <item android:id="@+id/action_sort_by_rating"
+        android:title="@string/action_sort_by_rating"
         app:showAsAction="never" />
-    <item android:id="@+id/action_revenue"
-        android:title="@string/action_revenue"
+    <item android:id="@+id/action_sort_by_revenue"
+        android:title="@string/action_sort_by_revenue"
         app:showAsAction="never" />
-    <item android:id="@+id/action_favorites"
-        android:title="@string/action_favorites"
+    <item android:id="@+id/action_sort_by_favorites"
+        android:title="@string/action_sort_by_favorites"
         app:showAsAction="never" />
 
 </menu>

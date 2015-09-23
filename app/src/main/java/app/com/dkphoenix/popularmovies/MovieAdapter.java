@@ -1,6 +1,6 @@
 package app.com.dkphoenix.popularmovies;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,8 +12,8 @@ import java.util.List;
  * Much of the code was taken from Udacities Android Custom ArrayAdapter class
  * https://github.com/udacity/android-custom-arrayadapter
  */
-public class MoviePosterAdapter extends ArrayAdapter<Movie> {
-    private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
+public class MovieAdapter extends ArrayAdapter<Movie> {
+    private static final String LOG_TAG = MovieAdapter.class.getSimpleName();
 
     /**
      * Custom constructor
@@ -23,7 +23,7 @@ public class MoviePosterAdapter extends ArrayAdapter<Movie> {
      * @param context        The current context. Used to inflate the layout file.
      * @param movies A List of MovieFlavor objects to display in the grid
      */
-    public MoviePosterAdapter(Activity context, List<Movie> movies) {
+    public MovieAdapter(Context context, List<Movie> movies) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         super(context,0, movies);
     }
