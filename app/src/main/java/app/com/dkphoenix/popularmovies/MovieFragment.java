@@ -1,5 +1,6 @@
 package app.com.dkphoenix.popularmovies;
 
+import android.app.LoaderManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -46,18 +47,23 @@ public class MovieFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Take data and populate the GridView it's attached to.
-        mMovieAdapter = new MovieAdapter(getActivity(), null);
+        mMovieAdapter = new MovieAdapter(getActivity());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container,false);
 
         // Get a reference to the GridView, and attach this adapter to it.
         mGridView = (GridView) rootView.findViewById(R.id.gridview_movies);
         mGridView.setAdapter(mMovieAdapter);
+        //TODO add mGridView.setOnItemClickListener
 
+        //TODO add savedInstanceState
 
-
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        updateMovie("popularity.desc");
+        return rootView;
     }
 
-
+    private void updateMovie(String sortBy) {
+        FetchMovieTask movieTask = new FetchMovieTask(getActivity());
+        movieTask.execute(sortBy);
+    }
 }

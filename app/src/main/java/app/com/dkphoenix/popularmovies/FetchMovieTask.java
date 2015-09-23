@@ -29,6 +29,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
     // TODO: Update API Key
     private final String apiKey = "6768486c0965e874fe2131f1fca3cd83";
 
+
     public FetchMovieTask(Context context) {
         mContext = context;
     }
@@ -108,7 +109,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             // Construct URL for MovieDB query
             final String MOIVE_BASE_URL =
                     "http://api.themoviedb.org/3/discover/movie?";
-            final String APIKEY_PARAM = "api_key=";
+            final String APIKEY_PARAM = "api_key";
             final String SORT_PARAM = "sort_by";
 
             Uri buildUri = Uri.parse(MOIVE_BASE_URL).buildUpon()
