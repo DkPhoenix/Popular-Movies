@@ -16,16 +16,9 @@ import java.util.Set;
 import app.com.dkphoenix.popularmovies.utils.PollingCheck;
 
 /**
- * Created by phoenix on 9/23/2015.
- */
-/*
-    Students: These are functions and some test data to make it easier to test your database and
-    Content Provider.  Note that you'll want your WeatherContract class to exactly match the one
-    in our solution to use these as-given.
+ * Created by DkPhoenix on 9/23/2015.
  */
 public class TestUtilities extends AndroidTestCase {
-    static final String TEST_LOCATION = "99705";
-    static final long TEST_DATE = 1419033600L;  // December 20th, 2014
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
@@ -46,67 +39,38 @@ public class TestUtilities extends AndroidTestCase {
         }
     }
 
-    /*
-        Students: Use this to create some default weather values for your database tests.
-     */
-//    static ContentValues createWeatherValues(long locationRowId) {
-//        ContentValues weatherValues = new ContentValues();
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_LOC_KEY, locationRowId);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, TEST_DATE);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DEGREES, 1.1);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_HUMIDITY, 1.2);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_PRESSURE, 1.3);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, 75);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, 65);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC, "Asteroids");
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, 5.5);
-//        weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, 321);
-//
-//        return weatherValues;
-//    }
-
-    /*
-        Students: You can uncomment this helper function once you have finished creating the
-        LocationEntry part of the WeatherContract.
-     */
     static ContentValues createMovieValues() {
         // Create a new map of values, where column names are the keys
         ContentValues testValues = new ContentValues();
-        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, 64.7488);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, -147.353);
+        testValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, 76341);
+        testValues.put(MovieContract.MovieEntry.COLUMN_BACKGROUND_IMAGE, "/tbhdm8UJAb4ViCTsulYFL3lxMCd.jpg");
+        testValues.put(MovieContract.MovieEntry.COLUMN_TITLE, "Mad Max: Fury Road");
+        testValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, "An apocalyptic story set in the furthest reaches of our planet, in a stark desert landscape where humanity is broken, and most everyone is crazed fighting for the necessities of life. Within this world exist two rebels on the run who just might be able to restore order. There's Max, a man of action and a man of few words, who seeks peace of mind following the loss of his wife and child in the aftermath of the chaos. And Furiosa, a woman of action and a woman who believes her path to survival may be achieved if she can make it across the desert back to her childhood homeland.");
+        testValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, "2015-05-15");
+        testValues.put(MovieContract.MovieEntry.COLUMN_POSTER_URL, "/kqjL17yufvn9OVLyXYpvtyrFfak.jpg");
+        testValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, "47.218736");
+        testValues.put(MovieContract.MovieEntry.COLUMN_RATING, "7.6");
+        testValues.put(MovieContract.MovieEntry.COLUMN_RATING_COUNT, 2283);
 
         return testValues;
     }
 
-    /*
-        Students: You can uncomment this function once you have finished creating the
-        LocationEntry part of the WeatherContract as well as the WeatherDbHelper.
-     */
-//    static long insertNorthPoleLocationValues(Context context) {
-//        // insert our test records into the database
-//        WeatherDbHelper dbHelper = new WeatherDbHelper(context);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
-//
-//        long locationRowId;
-//        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
-//
-//        // Verify we got a row back.
-//        assertTrue("Error: Failure to insert North Pole Location Values", locationRowId != -1);
-//
-//        return locationRowId;
-//    }
 
-    /*
-        Students: The functions we provide inside of TestProvider use this utility class to test
-        the ContentObserver callbacks using the PollingCheck class that we grabbed from the Android
-        CTS tests.
+    static long insertMovieValues(Context context) {
+        // insert our test records into the database
+        MovieDbHelper dbHelper = new MovieDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues testValues = TestUtilities.createMovieValues();
 
-        Note that this only tests that the onChange function is called; it does not test that the
-        correct Uri is returned.
-     */
+        long locationRowId;
+        locationRowId = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, testValues);
+
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert Movie Values", locationRowId != -1);
+
+        return locationRowId;
+    }
+
     static class TestContentObserver extends ContentObserver {
         final HandlerThread mHT;
         boolean mContentChanged;

@@ -27,8 +27,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                MovieContract.MovieEntry.COLUMN_POPULARITY + " REAL NOT NULL, " +
-                MovieContract.MovieEntry.COLUMN_RATING + " REAL NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_POPULARITY + " TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_RATING + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_RATING_COUNT + " INTEGER NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_POSTER_URL + " TEXT NOT NULL, " +
@@ -42,6 +42,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //TODO: Change next line eventually so favorites aren't lost on DB update
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
         onCreate(db);
     }
 }

@@ -30,7 +30,7 @@ public class MovieContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIES;
 
-        public static final String TABLE_NAME = "movie";
+        public static final String TABLE_NAME = "movies";
 
         // Movie id as returned by API
         public static final String COLUMN_MOVIE_ID = "movie_id";
@@ -56,12 +56,11 @@ public class MovieContract {
         }
 
         public static Uri buildMovieWithId(int movie_id) {
-            return CONTENT_URI.buildUpon().appendPath(Integer.toString(movie_id))
-                    .appendQueryParameter(COLUMN_MOVIE_ID,Integer.toString(movie_id)).build();
+            return CONTENT_URI.buildUpon().appendPath(Integer.toString(movie_id)).build();
         }
 
         public static int getIdFromUri(Uri uri) {
-            return Integer.parseInt(uri.getPathSegments().get(2));
+            return Integer.parseInt(uri.getPathSegments().get(1));
         }
 
     }

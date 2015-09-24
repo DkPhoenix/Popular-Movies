@@ -94,11 +94,11 @@ public class TestDb extends AndroidTestCase {
 
         // Second Step: Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
-        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
+        ContentValues testValues = TestUtilities.createMovieValues();
 
         // Third Step: Insert ContentValues into database and get a row ID back
         long locationRowId;
-        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
+        locationRowId = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, testValues);
 
         // Verify we got a row back.
         assertTrue(locationRowId != -1);
@@ -109,7 +109,7 @@ public class TestDb extends AndroidTestCase {
         // Fourth Step: Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
-                WeatherContract.LocationEntry.TABLE_NAME,  // Table to Query
+                MovieContract.MovieEntry.TABLE_NAME,  // Table to Query
                 null, // all columns
                 null, // Columns for the "where" clause
                 null, // Values for the "where" clause
@@ -120,21 +120,20 @@ public class TestDb extends AndroidTestCase {
 
         // Move the cursor to a valid database row and check to see if we got any records back
         // from the query
-        assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
+        assertTrue( "Error: No Records returned from movie query", cursor.moveToFirst() );
 
         // Fifth Step: Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+        TestUtilities.validateCurrentRecord("Error: Movie Query Validation Failed",
                 cursor, testValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
-        assertFalse( "Error: More than one record returned from location query",
+        assertFalse( "Error: More than one record returned from movie query",
                 cursor.moveToNext() );
 
         // Sixth Step: Close Cursor and Database
         cursor.close();
         db.close();
-        return locationRowId;
     }
 }
