@@ -18,6 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
+import app.com.dkphoenix.popularmovies.data.MovieContract;
+
 /**
  * Created by DkPhoenix on 9/21/2015.
  */
@@ -60,23 +62,44 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             //String[] resultsStrs = new String[];
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
-                Movie movieObject = new Movie(
-                        movie.getInt(MDB_ID),
-                        movie.getString(MDB_TITLE),
-                        movie.getString(MDB_POSTER),
-                        movie.getString(MDB_DESCRIPTION),
-                        Float.parseFloat(movie.getString(MDB_RATING)),
-                        movie.getString(MDB_RELEASE_DATE),
-                        Float.parseFloat(movie.getString(MDB_POPULARITY)),
-                        movie.getString(MDB_IMAGE),
-                        movie.getInt(MDB_RATING_COUNT)
-                );
 
                 ContentValues movieValues = new ContentValues();
 
+                movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getInt(MDB_ID));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getString(MDB_TITLE));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_URL, movie.getString(MDB_POSTER));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, movie.getString(MDB_DESCRIPTION));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_RATING, Float.parseFloat(movie.getString(MDB_RATING)));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getString(MDB_RELEASE_DATE));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, Float.parseFloat(movie.getString(MDB_POPULARITY)));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_BACKGROUND_IMAGE, movie.getString(MDB_IMAGE));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_RATING_COUNT, movie.getInt(MDB_RATING_COUNT));
+//                Movie movieObject = new Movie(
+//                        movie.getInt(MDB_ID),
+//                        movie.getString(MDB_TITLE),
+//                        movie.getString(MDB_POSTER),
+//                        movie.getString(MDB_DESCRIPTION),
+//                        Float.parseFloat(movie.getString(MDB_RATING)),
+//                        movie.getString(MDB_RELEASE_DATE),
+//                        Float.parseFloat(movie.getString(MDB_POPULARITY)),
+//                        movie.getString(MDB_IMAGE),
+//                        movie.getInt(MDB_RATING_COUNT)
+//                );
+
                 //movieValues.put()
+                cVector.add(movieValues);
             }
 
+            int inserted = 0;
+            // add to database
+            if (cVector.size() > 0) {
+                ContentValues[] cvArray = new ContentValues[cVector.size()];
+                cVector.toArray(cvArray);
+                Uri tUri = MovieContract.MovieEntry.CONTENT_URI;
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
+            }
+
+            Log.d(LOG_TAG, "FetchMovieTask Complete. " + inserted + " Inserted");
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -113,7 +136,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             final String SORT_PARAM = "sort_by";
 
             Uri buildUri = Uri.parse(MOIVE_BASE_URL).buildUpon()
-                    .appendQueryParameter(SORT_PARAM, params[0])
+                    .appendQueryParameter(SORT_PARAM, sortOrder)
                     .appendQueryParameter(APIKEY_PARAM, apiKey)
                     .build();
 
@@ -162,4 +185,6 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         }
         return null;
     }
+
+
 }

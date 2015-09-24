@@ -55,9 +55,14 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-//        public static Uri buildMovieIdUri(int movie_id) {
-//            return CONTENT_URI.buildUpon().appendPath(movie_id)
-//                    .appendQueryParameter(COLUMN_MOVIE_ID,Integer.toString(movie_id)).build();
-//        }
+        public static Uri buildMovieWithId(int movie_id) {
+            return CONTENT_URI.buildUpon().appendPath(Integer.toString(movie_id))
+                    .appendQueryParameter(COLUMN_MOVIE_ID,Integer.toString(movie_id)).build();
+        }
+
+        public static int getIdFromUri(Uri uri) {
+            return Integer.parseInt(uri.getPathSegments().get(2));
+        }
+
     }
 }
