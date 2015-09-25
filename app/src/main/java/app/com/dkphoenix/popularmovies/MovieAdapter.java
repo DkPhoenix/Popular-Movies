@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by DkPhoenix on 9/21/2015.
@@ -26,6 +29,12 @@ public class MovieAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        String image_url = "http://image.tmdb.org/t/p/w185" +
+                cursor.getString(MovieFragment.COL_MOVIE_POSTER_URL);
+
+        ImageView posterView = (ImageView) view.findViewById(R.id.grid_item_posterImage);
+        Picasso.with(context).load(image_url).into(posterView);
+
         TextView titleView = (TextView) view.findViewById(R.id.grid_item_title);
         titleView.setText(cursor.getString(MovieFragment.COL_MOVIE_TITLE));
     }

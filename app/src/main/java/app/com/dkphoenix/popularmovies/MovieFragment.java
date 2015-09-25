@@ -108,7 +108,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
-        Uri movieUri = MovieContract.MovieEntry.buildMovieUri(id);
+        Uri movieUri = MovieContract.MovieEntry.CONTENT_URI;
 
         return new CursorLoader(getActivity(),
                 movieUri,
