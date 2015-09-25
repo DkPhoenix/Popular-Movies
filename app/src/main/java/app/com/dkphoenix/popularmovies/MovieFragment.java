@@ -23,6 +23,7 @@ import app.com.dkphoenix.popularmovies.data.MovieContract;
 public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int MOVIE_LOADER = 0;
+    private String mSortBy = "popularity.desc";
 
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
@@ -65,12 +66,32 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         inflater.inflate(R.menu.moviefragment, menu);
         MenuItem action_sort_by_popularity = menu.findItem(R.id.action_sort_by_popularity);
         MenuItem action_sort_by_rating = menu.findItem(R.id.action_sort_by_rating);
-        MenuItem action_sort_by_revenue = menu.findItem(R.id.action_sort_by_revenue);
+        if (mSortBy == "popularity.desc") {
+            if (!action_sort_by_popularity.isChecked())
+                action_sort_by_popularity.setChecked(true);
+        } else {
+            if (!action_sort_by_rating.isChecked())
+                action_sort_by_rating.setChecked(true);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        int id = item.getGroupId();
+        switch (id) {
+            case R.id.action_sort_by_popularity:
+                if (item.isChecked())
+                    item.setChecked(false);
+                else
+                    item.setChecked(true);
+                mSortBy = "popularity.desc";
+                return true;
+            case R.id.action_sort_by_rating:
+                mSortBy = "vote_average.desc";
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
