@@ -77,17 +77,21 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getGroupId();
+        int id = item.getItemId();
         switch (id) {
             case R.id.action_sort_by_popularity:
-                if (item.isChecked())
-                    item.setChecked(false);
-                else
+               if (!item.isChecked()) {
                     item.setChecked(true);
-                mSortBy = "popularity.desc";
+                    mSortBy = "popularity.desc";
+                    updateMovie();
+                }
                 return true;
             case R.id.action_sort_by_rating:
-                mSortBy = "vote_average.desc";
+                if (!item.isChecked()) {
+                    item.setChecked(true);
+                    mSortBy = "vote_average.desc";
+                    updateMovie();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -116,7 +120,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     private void updateMovie() {
-        FetchMovieTask movieTask = new FetchMovieTask(getActivity());
+        //mSortBy
+        FetchMovieTask movieTask = new FetchMovieTask(getActivity(), mSortBy);
         movieTask.execute();
     }
 

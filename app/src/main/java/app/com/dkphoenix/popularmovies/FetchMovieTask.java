@@ -27,13 +27,15 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
     private final Context mContext;
+    private static String mSortBy;
 
     // TODO: Update API Key
     private final String apiKey = "6768486c0965e874fe2131f1fca3cd83";
 
 
-    public FetchMovieTask(Context context) {
+    public FetchMovieTask(Context context, String mSortBy) {
         mContext = context;
+        this.mSortBy = mSortBy;
     }
 
     private void getMovieDataFromJson(String movieJasonStr) {
@@ -117,7 +119,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
     protected Void doInBackground(String... params) {
 
         // If there's no sort order specified, default to popularity
-        String sortOrder = "popularity.desc";
+        String sortOrder = mSortBy;
         if (params.length > 0) {
             sortOrder = params[0];
         }
