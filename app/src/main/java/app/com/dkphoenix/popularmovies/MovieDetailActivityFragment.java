@@ -81,6 +81,9 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
 
         mBackgroundImage = (ImageView) rootView.findViewById(R.id.detail_background_image);
         mTitleTextView = (TextView) rootView.findViewById(R.id.detail_title);
+        mDescriptionView = (TextView) rootView.findViewById(R.id.detail_description);
+        mDateView = (TextView) rootView.findViewById(R.id.detail_release_date);
+        mRating = (TextView) rootView.findViewById(R.id.detail_rating);
         return rootView;
     }
 
@@ -114,7 +117,7 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
             mTitleTextView.setText(title);
 
             String description = data.getString(COL_MOVIE_DESCRIPTION);
-//            mDescriptionView.setText(description);
+            mDescriptionView.setText(description);
 
             String release_date = data.getString(COL_MOVIE_RELEASE_DATE);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -122,15 +125,15 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
                 String date = DateUtils.formatDateTime(getActivity(),
                         formatter.parse(release_date).getTime(),
                             DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
-//                mDateView.setText(date);
+                mDateView.setText("Release Date: " + date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             String rating = data.getString(COL_MOVIE_RATING);
-//            mRating.setText(rating);
+            mRating.setText(rating + " / 10");
 
-            String image_url = "http://image.tmdb.org/t/p/w185" +
+            String image_url = "http://image.tmdb.org/t/p/w154" +
                     data.getString(COL_MOVIE_POSTER_URL);
             Picasso.with(getActivity()).load(image_url).into(mBackgroundImage);
         }
