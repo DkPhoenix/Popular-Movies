@@ -117,7 +117,10 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
             mTitleTextView.setText(title);
 
             String description = data.getString(COL_MOVIE_DESCRIPTION);
-            mDescriptionView.setText(description);
+            if (description == null)
+                mDescriptionView.setText("No description given.");
+            else
+                mDescriptionView.setText(description);
 
             String release_date = data.getString(COL_MOVIE_RELEASE_DATE);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

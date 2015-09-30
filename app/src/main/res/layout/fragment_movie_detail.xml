@@ -12,7 +12,7 @@
         <TextView
             android:id="@+id/detail_title"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             android:background="#FF009688"
             android:gravity="center_vertical"
             android:padding="5dp"
@@ -29,10 +29,11 @@
 
             <ImageView
                 android:id="@+id/detail_background_image"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:scaleType="center"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:src="@drawable/w154"/>
 
             <LinearLayout
@@ -51,16 +52,6 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="1 Jan 2015" />
-
-                <TextView
-                    android:id="@+id/detail_runtime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="25sp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:textStyle="italic|bold"
-                    android:text="120min"/>
 
                 <TextView
                     android:id="@+id/detail_rating"

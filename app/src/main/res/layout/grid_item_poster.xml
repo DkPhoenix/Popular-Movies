@@ -8,9 +8,9 @@
         android:id="@+id/grid_item_posterImage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
         android:layout_gravity="center"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:src="@drawable/w185"/>
 
     <TextView
         android:id="@+id/grid_item_title"
@@ -22,6 +22,7 @@
         android:paddingBottom="15dp"
         android:layout_gravity="bottom"
         android:textColor="@android:color/white"
-        android:background="#55000000"/>
+        android:background="#55000000"
+        android:text="Jurassic World"/>
 
 </LinearLayout>
