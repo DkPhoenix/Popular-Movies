@@ -30,7 +30,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
     private static String mSortBy;
 
     // TODO: Update API Key
-    private final String apiKey = "";
+    private final String apiKey = BuildConfig.THE_MOVIE_DB_API_KEY;
 
 
     public FetchMovieTask(Context context, String mSortBy) {
