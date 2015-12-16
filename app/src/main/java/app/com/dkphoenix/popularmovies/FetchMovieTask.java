@@ -144,6 +144,8 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
             URL url = new URL(buildUri.toString());
 
+            //http://api.themoviedb.org/3/genre/movie/list
+
             // Create request to MovieDB and open connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

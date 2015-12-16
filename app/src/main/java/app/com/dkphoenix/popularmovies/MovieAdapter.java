@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -37,6 +38,10 @@ public class MovieAdapter extends CursorAdapter {
 
         TextView titleView = (TextView) view.findViewById(R.id.grid_item_title);
         titleView.setText(cursor.getString(MovieFragment.COL_MOVIE_TITLE));
+
+        RatingBar ratingBar = (RatingBar) view.findViewById(R.id.grid_item_rating);
+        ratingBar.setRating(cursor.getFloat(MovieFragment.COL_MOVIE_RATING)/2);
+
     }
 
 //    @Override
