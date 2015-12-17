@@ -25,10 +25,9 @@ import app.com.dkphoenix.popularmovies.data.MovieContract;
  */
 public class FetchMovieTask extends AsyncTask<String, Void, Void> {
 
+    private static String mSortBy;
     private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
     private final Context mContext;
-    private static String mSortBy;
-
     // TODO: Update API Key
     private final String apiKey = BuildConfig.THE_MOVIE_DB_API_KEY;
 
@@ -38,9 +37,49 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         this.mSortBy = mSortBy;
     }
 
-    private void getMovieDataFromJson(String movieJasonStr) {
+    private void getGenreDataFromJson(String genreJsonStr) {
+        // Names of the JSON objects that need to be extracted for the genres
+        final String MDB_GENRES = "genres";
+        final String MDB_GENRE_ID = "id";
+        final String MDB_GENRE_NAME = "name";
 
-        // Names of the JSON objects that need to be extracted
+        try {
+            JSONObject movieJson = new JSONObject(genreJsonStr);
+            JSONArray genreArray = movieJson.getJSONArray(MDB_GENRES);
+
+            // Insert the new movie information into the database
+            Vector<ContentValues> cVector = new Vector<>(genreArray.length());
+
+            // return value that will be filled with genre details
+            for (int i = 0; i < genreArray.length(); i++) {
+                JSONObject genre = genreArray.getJSONObject(i);
+
+                ContentValues genreValues = new ContentValues();
+
+                genreValues.put(MovieContract.GenreEntry._ID, genre.getInt(MDB_GENRE_ID));
+                genreValues.put(MovieContract.GenreEntry.COLUMN_NAME, genre.getString(MDB_GENRE_NAME));
+                cVector.add(genreValues);
+            }
+
+            int inserted = 0;
+            // add to database
+            if (cVector.size() > 0) {
+                ContentValues[] cvArray = new ContentValues[cVector.size()];
+                cVector.toArray(cvArray);
+                Uri tUri = MovieContract.GenreEntry.CONTENT_URI;
+                inserted = mContext.getContentResolver().bulkInsert(tUri, cvArray);
+            }
+
+            Log.d(LOG_TAG, "FetchMovieTask Complete. " + inserted + " Genres inserted");
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+    }
+
+    private void getMovieDataFromJson(String movieJsonStr) {
+        // Names of the JSON objects that need to be extracted for the movies
         final String MDB_RESULTS = "results";
         final String MDB_ID = "id";
         final String MDB_TITLE = "original_title";
@@ -48,13 +87,14 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         final String MDB_DESCRIPTION = "overview";
         final String MDB_RATING = "vote_average";
         final String MDB_RELEASE_DATE = "release_date";
+        final String MDB_GENRES = "genre_ids";
         // Not needed for project
         final String MDB_POPULARITY = "popularity";
         final String MDB_IMAGE = "backdrop_path";
         final String MDB_RATING_COUNT = "vote_count";
 
         try {
-            JSONObject movieJson = new JSONObject(movieJasonStr);
+            JSONObject movieJson = new JSONObject(movieJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(MDB_RESULTS);
 
             // Insert the new movie information into the database
@@ -65,12 +105,21 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movie = movieArray.getJSONObject(i);
 
+                //get the list of genres for this movie
+                String genreList = "";
+                JSONArray genres = movie.getJSONArray(MDB_GENRES);
+                for (int j = 0; j < genres.length(); j++) {
+                    genreList = genreList + genres.getString(j);
+                    if (j+1 != genres.length()) genreList = genreList + ":";
+                }
+
                 ContentValues movieValues = new ContentValues();
 
                 movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getInt(MDB_ID));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getString(MDB_TITLE));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_URL, movie.getString(MDB_POSTER));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, movie.getString(MDB_DESCRIPTION));
+                movieValues.put(MovieContract.MovieEntry.COLUMN_GENRES, genreList);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_RATING, Float.parseFloat(movie.getString(MDB_RATING)));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getString(MDB_RELEASE_DATE));
                 movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, Float.parseFloat(movie.getString(MDB_POPULARITY)));
@@ -109,44 +158,14 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         }
     }
 
-    /**
-     * Method to get data from MovieDb site
-     *
-     * @param params Sort Order - popularity, vote_average, revenue
-     *               plus .desc or .asc
-     */
-    @Override
-    protected Void doInBackground(String... params) {
-
-        // If there's no sort order specified, default to popularity
-        String sortOrder = mSortBy;
-        if (params.length > 0) {
-            sortOrder = params[0];
-        }
-
+    private String getJsonResponse(Uri uri) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        // Will contain the raw JSON response as a string.
-        String movieJsonStr = null;
-
         try {
-            // Construct URL for MovieDB query
-            final String MOIVE_BASE_URL =
-                    "http://api.themoviedb.org/3/discover/movie?";
-            final String APIKEY_PARAM = "api_key";
-            final String SORT_PARAM = "sort_by";
+            URL url = new URL(uri.toString());
 
-            Uri buildUri = Uri.parse(MOIVE_BASE_URL).buildUpon()
-                    .appendQueryParameter(SORT_PARAM, sortOrder)
-                    .appendQueryParameter(APIKEY_PARAM, apiKey)
-                    .build();
-
-            URL url = new URL(buildUri.toString());
-
-            //http://api.themoviedb.org/3/genre/movie/list
-
-            // Create request to MovieDB and open connection
+            // Create request to MovieDB to get movies and open connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -170,8 +189,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 // stream is empty
                 return null;
             }
-            movieJsonStr = buffer.toString();
-            getMovieDataFromJson(movieJsonStr);
+            return buffer.toString();
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             return null;
@@ -186,6 +204,51 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                     Log.e(LOG_TAG, "Error closing stream ", e);
                 }
             }
+        }
+    }
+
+    /**
+     * Method to get data from MovieDb site
+     *
+     * @param params Sort Order - popularity, vote_average, revenue
+     *               plus .desc or .asc
+     */
+    @Override
+    protected Void doInBackground(String... params) {
+
+        // If there's no sort order specified, default to popularity
+        String sortOrder = mSortBy;
+        if (params.length > 0) {
+            sortOrder = params[0];
+        }
+
+        // Construct URL for MovieDB query to get genres
+        final String GENRE_BASE_URL =
+                "http://api.themoviedb.org/3/genre/movie/list?";
+        final String APIKEY_PARAM = "api_key";
+
+        // Construct URL for MovieDB query
+        final String MOVIE_BASE_URL =
+                "http://api.themoviedb.org/3/discover/movie?";
+        final String SORT_PARAM = "sort_by";
+
+        Uri genreUri = Uri.parse(GENRE_BASE_URL).buildUpon()
+                .appendQueryParameter(APIKEY_PARAM, apiKey)
+                .build();
+
+        Uri movieUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendQueryParameter(SORT_PARAM, sortOrder)
+                .appendQueryParameter(APIKEY_PARAM, apiKey)
+                .build();
+
+        String response = getJsonResponse(genreUri);
+        if (response != null) {
+            getGenreDataFromJson(response);
+        }
+
+        response = getJsonResponse(movieUri);
+        if (response != null) {
+            getMovieDataFromJson(response);
         }
         return null;
     }
