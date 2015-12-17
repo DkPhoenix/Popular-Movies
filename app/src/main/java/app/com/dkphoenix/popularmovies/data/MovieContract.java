@@ -18,6 +18,7 @@ public class MovieContract {
 
     // Possible paths
     public static final String PATH_MOVIES = "movies";
+    public static final String PATH_GENRES = "genres";
 
     /* Inner class that defines the table contents of the movie table */
     public static final class MovieEntry implements BaseColumns {
@@ -40,6 +41,8 @@ public class MovieContract {
         public static final String COLUMN_POSTER_URL = "poster_url";
         // Movie description
         public static final String COLUMN_DESCRIPTION = "description";
+        // Movie Genres
+        public static final String COLUMN_GENRES = "genres";
         // Movie Rating stored as a float
         public static final String COLUMN_RATING = "rating";
         // Number of people who have reviewed the movie stored as int
@@ -57,6 +60,35 @@ public class MovieContract {
 
         public static Uri buildMovieWithId(int movie_id) {
             return CONTENT_URI.buildUpon().appendPath(Integer.toString(movie_id)).build();
+        }
+
+        public static int getIdFromUri(Uri uri) {
+            return Integer.parseInt(uri.getPathSegments().get(1));
+        }
+    }
+
+    /* Inner class that defines the table contents of the genre table */
+    public static final class GenreEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_GENRES).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GENRES;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GENRES;
+
+        public static final String TABLE_NAME = "genres";
+
+        // Name of the genre
+        public static final String COLUMN_NAME = "name";
+
+        public static Uri buildGenreUri (long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildGenreWithId(int genre_id) {
+            return CONTENT_URI.buildUpon().appendPath(Integer.toString(genre_id)).build();
         }
 
         public static int getIdFromUri(Uri uri) {

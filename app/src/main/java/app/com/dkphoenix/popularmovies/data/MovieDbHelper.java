@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MovieDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     static final String DATABASE_NAME = "movies.db";
 
@@ -21,12 +21,19 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Create a table to hold genre.
+        final String SQL_CREATE_GENRES_TABLE = "CREATE TABLE " + MovieContract.GenreEntry.TABLE_NAME + " (" +
+                MovieContract.GenreEntry._ID + " INTEGER PRIMARY KEY, " +
+                MovieContract.GenreEntry.COLUMN_NAME + " TEXT NOT NULL " +
+                " );";
+
         // Create a table to hold movie data
         final String SQL_CREATE_MOVIES_TABLE = "CREATE TABLE " + MovieContract.MovieEntry.TABLE_NAME + " (" +
                 MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MovieContract.MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
+                MovieContract.MovieEntry.COLUMN_GENRES + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_POPULARITY + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_RATING + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.COLUMN_RATING_COUNT + " INTEGER NOT NULL, " +
@@ -37,6 +44,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 // Ensure no movie is entered twice
                 "UNIQUE (" + MovieContract.MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
 
+        db.execSQL(SQL_CREATE_GENRES_TABLE);
         db.execSQL(SQL_CREATE_MOVIES_TABLE);
     }
 
@@ -44,6 +52,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO: Change next line eventually so favorites aren't lost on DB update
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.GenreEntry.TABLE_NAME);
         onCreate(db);
     }
 }
