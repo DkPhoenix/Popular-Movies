@@ -39,6 +39,9 @@ public class MovieAdapter extends CursorAdapter {
         TextView titleView = (TextView) view.findViewById(R.id.grid_item_title);
         titleView.setText(cursor.getString(MovieFragment.COL_MOVIE_TITLE));
 
+        TextView genreView = (TextView) view.findViewById(R.id.grid_item_Genre);
+        genreView.setText(cursor.getString(MovieFragment.COL_MOVIE_GENRES));
+
         RatingBar ratingBar = (RatingBar) view.findViewById(R.id.grid_item_rating);
         ratingBar.setRating(cursor.getFloat(MovieFragment.COL_MOVIE_RATING)/2);
 

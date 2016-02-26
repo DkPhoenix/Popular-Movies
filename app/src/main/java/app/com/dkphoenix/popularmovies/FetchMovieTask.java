@@ -2,6 +2,7 @@ package app.com.dkphoenix.popularmovies;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -109,8 +110,13 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                 String genreList = "";
                 JSONArray genres = movie.getJSONArray(MDB_GENRES);
                 for (int j = 0; j < genres.length(); j++) {
-                    genreList = genreList + genres.getString(j);
-                    if (j+1 != genres.length()) genreList = genreList + ":";
+                    Uri uri = MovieContract.GenreEntry.buildGenreWithId(genres.getInt(j));
+                    Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
+                    if (cursor.moveToFirst()) {
+                        genreList = genreList + cursor.getString(1);
+                    }
+
+                    if (j+1 != genres.length()) genreList = genreList + ", ";
                 }
 
                 ContentValues movieValues = new ContentValues();

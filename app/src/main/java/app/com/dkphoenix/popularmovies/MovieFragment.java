@@ -33,6 +33,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     static final int COL_MOVIE_RELEASE_DATE = 7;
     static final int COL_MOVIE_POPULARITY = 8;
     static final int COL_MOVIE_BACKGROUND_IMAGE = 9;
+    static final int COL_MOVIE_GENRES = 10;
     private static final int MOVIE_LOADER = 0;
     private static final String[] MOVIE_COLUMNS = {
             MovieContract.MovieEntry.TABLE_NAME + "." + MovieContract.MovieEntry._ID,
@@ -44,7 +45,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
             MovieContract.MovieEntry.COLUMN_RATING_COUNT,
             MovieContract.MovieEntry.COLUMN_RELEASE_DATE,
             MovieContract.MovieEntry.COLUMN_POPULARITY,
-            MovieContract.MovieEntry.COLUMN_BACKGROUND_IMAGE
+            MovieContract.MovieEntry.COLUMN_BACKGROUND_IMAGE,
+            MovieContract.MovieEntry.COLUMN_GENRES
     };
     private static final String SELECTED_KEY = "selected_position";
     private MovieAdapter mMovieAdapter;

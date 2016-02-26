@@ -19,6 +19,7 @@ public class Movie implements Parcelable{
     private float popularity; // popularity
     private String backdrop; // backdrop_path
     private int ratingCount; // vote_count
+    private String genre; //
 
     public Movie() {}
 
@@ -34,10 +35,11 @@ public class Movie implements Parcelable{
      * @param popularity popularity
      * @param backdrop backdrop_path
      * @param ratingCount vote_count
+     * @param genre genre
      */
     public Movie(int id, String title, String poster, String description,
                  float rating, String releaseDate, float popularity,
-                 String backdrop, int ratingCount) {
+                 String backdrop, int ratingCount, String genre) {
         this.id = id;
         this.title = title;
         this.poster = poster;
@@ -47,6 +49,7 @@ public class Movie implements Parcelable{
         this.popularity = popularity;
         this.backdrop = backdrop;
         this.ratingCount = ratingCount;
+        this.genre = genre;
     }
 
     private Movie(Parcel in) {
@@ -59,6 +62,7 @@ public class Movie implements Parcelable{
         popularity = in.readFloat();
         backdrop = in.readString();
         ratingCount = in.readInt();
+        genre = in.readString();
     }
 
     @Override
@@ -77,6 +81,7 @@ public class Movie implements Parcelable{
         dest.writeFloat(popularity);
         dest.writeString(backdrop);
         dest.writeInt(ratingCount);
+        dest.writeString(genre);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -162,4 +167,8 @@ public class Movie implements Parcelable{
     public void setRatingCount(int ratingCount) {
         this.ratingCount = ratingCount;
     }
+
+    public String getGenre() { return genre; }
+
+    public void setGenre(String genre) { this.genre = genre; }
 }
