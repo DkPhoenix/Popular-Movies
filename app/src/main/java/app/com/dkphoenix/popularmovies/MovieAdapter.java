@@ -22,28 +22,49 @@ public class MovieAdapter extends CursorAdapter {
 
     public MovieAdapter(Context context, Cursor c, int flags) { super(context, c, flags); }
 
+    /**
+     *  Cache of the children views for a movie list item
+     */
+    public static class ViewHolder {
+        public final ImageView posterView;
+        public final TextView titleView;
+        public final TextView genreView;
+        public final RatingBar ratingBar;
+
+        public ViewHolder(View view) {
+            posterView = (ImageView) view.findViewById(R.id.grid_item_posterImage);
+            titleView = (TextView) view.findViewById(R.id.grid_item_title);
+            genreView = (TextView) view.findViewById(R.id.grid_item_Genre);
+            ratingBar = (RatingBar) view.findViewById(R.id.grid_item_rating);
+        }
+
+    }
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.grid_item_poster, parent, false);
+
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
+
         return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+
         String image_url = "http://image.tmdb.org/t/p/w185" +
                 cursor.getString(MovieFragment.COL_MOVIE_POSTER_URL);
+        Picasso.with(context).load(image_url).into(viewHolder.posterView);
 
-        ImageView posterView = (ImageView) view.findViewById(R.id.grid_item_posterImage);
-        Picasso.with(context).load(image_url).into(posterView);
+        //String title = cursor.getString(MovieFragment.COL_MOVIE_TITLE);
+        viewHolder.titleView.setText(cursor.getString(MovieFragment.COL_MOVIE_TITLE));
 
-        TextView titleView = (TextView) view.findViewById(R.id.grid_item_title);
-        titleView.setText(cursor.getString(MovieFragment.COL_MOVIE_TITLE));
+        viewHolder.genreView.setText(cursor.getString(MovieFragment.COL_MOVIE_GENRES));
 
-        TextView genreView = (TextView) view.findViewById(R.id.grid_item_Genre);
-        genreView.setText(cursor.getString(MovieFragment.COL_MOVIE_GENRES));
-
-        RatingBar ratingBar = (RatingBar) view.findViewById(R.id.grid_item_rating);
-        ratingBar.setRating(cursor.getFloat(MovieFragment.COL_MOVIE_RATING)/2);
+        viewHolder.ratingBar.setRating(cursor.getFloat(MovieFragment.COL_MOVIE_RATING)/2);
 
     }
 
