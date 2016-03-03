@@ -201,6 +201,9 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
      * selections.
      */
     public interface Callback {
+        /**
+         * MovieDetailActivityFragmentCallback for when an item has been selected.
+         */
         public void onItemSelected(Uri dataUri);
     }
 }

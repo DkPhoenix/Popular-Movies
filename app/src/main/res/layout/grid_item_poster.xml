@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     android:padding="5dp"
     android:orientation="vertical"
-    android:background="@android:drawable/dialog_holo_light_frame">
-
+    android:background="@drawable/touch_selector"
+    >
+    <!--android:background="@android:drawable/dialog_holo_light_frame"-->
     <ImageView
         android:id="@+id/grid_item_posterImage"
         android:layout_width="match_parent"

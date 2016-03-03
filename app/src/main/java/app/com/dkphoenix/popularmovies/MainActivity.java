@@ -38,24 +38,24 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.Cal
     }
 
     @Override
-    public void onItemSelected(Uri dataUri) {
+    public void onItemSelected(Uri contentUri) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle args = new Bundle();
-            args.putParcelable(MovieDetailActivityFragment.DETAIL_URI, getIntent().getData());
+            args.putParcelable(MovieDetailActivityFragment.DETAIL_URI, contentUri);
 
             MovieDetailActivityFragment fragment = new MovieDetailActivityFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.movie_detail_container, fragment)
+                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
 
         } else {
             Intent intent = new Intent(this, MovieDetailActivity.class)
-                    .setData(dataUri);
+                    .setData(contentUri);
             startActivity(intent);
         }
     }
